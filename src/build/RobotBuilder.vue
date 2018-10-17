@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="content">
+    <button class="add-to-cart" @click="addToCart()">Add to Cart</button>
     <div class="top-row">
       <div class="top part">
         <div class="robot-name">
@@ -35,6 +36,23 @@
         <button @click="selectNextBase()" class="next-selector">&#9658;</button>
       </div>
     </div>
+    <div>
+      <h1>Cart</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Robot</th>
+            <th class="cost">Cost</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(robot, index) in cart" :key="index">
+            <td>{{robot.head.title}}</td>
+            <td class="cost">{{robot.cost}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -56,6 +74,7 @@ export default {
   data() {
     return {
       availableParts,
+      cart: [],
       selectedHeadIndex: 0,
       selectedLeftArmIndex: 0,
       selectedTorsoIndex: 0,
@@ -75,45 +94,40 @@ export default {
     },
   },
   methods: {
+    addToCart() {
+      const robot = this.selectedRobot;
+      const cost = robot.head.cost + robot.leftArm.cost + robot.torso.cost + robot.rightArm.cost + robot.base.cost;
+      this.cart.push(Object.assign({}, robot, { cost }));
+    },
     selectNextHead() {
-      this.selectedHeadIndex =
-        getNextValidIndex(this.selectedHeadIndex, availableParts.heads.length);
+      this.selectedHeadIndex = getNextValidIndex(this.selectedHeadIndex, availableParts.heads.length);
     },
     selectPreviousHead() {
-      this.selectedHeadIndex =
-        getPreviousValidIndex(this.selectedHeadIndex, availableParts.heads.length);
+      this.selectedHeadIndex = getPreviousValidIndex(this.selectedHeadIndex, availableParts.heads.length);
     },
     selectNextLeftArm() {
-      this.selectedLeftArmIndex =
-        getNextValidIndex(this.selectedLeftArmIndex, availableParts.arms.length);
+      this.selectedLeftArmIndex = getNextValidIndex(this.selectedLeftArmIndex, availableParts.arms.length);
     },
     selectPreviousLeftArm() {
-      this.selectedLeftArmIndex =
-        getPreviousValidIndex(this.selectedLeftArmIndex, availableParts.arms.length);
+      this.selectedLeftArmIndex = getPreviousValidIndex(this.selectedLeftArmIndex, availableParts.arms.length);
     },
     selectNextTorso() {
-      this.selectedTorsoIndex =
-        getNextValidIndex(this.selectedTorsoIndex, availableParts.torsos.length);
+      this.selectedTorsoIndex = getNextValidIndex(this.selectedTorsoIndex, availableParts.torsos.length);
     },
     selectPreviousTorso() {
-      this.selectedTorsoIndex =
-        getPreviousValidIndex(this.selectedTorsoIndex, availableParts.torsos.length);
+      this.selectedTorsoIndex = getPreviousValidIndex(this.selectedTorsoIndex, availableParts.torsos.length);
     },
     selectNextRightArm() {
-      this.selectedRightArmIndex =
-        getNextValidIndex(this.selectedRightArmIndex, availableParts.arms.length);
+      this.selectedRightArmIndex = getNextValidIndex(this.selectedRightArmIndex, availableParts.arms.length);
     },
     selectPreviousRightArm() {
-      this.selectedRightArmIndex =
-        getPreviousValidIndex(this.selectedRightArmIndex, availableParts.arms.length);
+      this.selectedRightArmIndex = getPreviousValidIndex(this.selectedRightArmIndex, availableParts.arms.length);
     },
     selectNextBase() {
-      this.selectedBaseIndex =
-        getNextValidIndex(this.selectedBaseIndex, availableParts.bases.length);
+      this.selectedBaseIndex = getNextValidIndex(this.selectedBaseIndex, availableParts.bases.length);
     },
     selectPreviousBase() {
-      this.selectedBaseIndex =
-        getPreviousValidIndex(this.selectedBaseIndex, availableParts.bases.length);
+      this.selectedBaseIndex = getPreviousValidIndex(this.selectedBaseIndex, availableParts.bases.length);
     },
   },
 };
@@ -239,5 +253,22 @@ export default {
   top: -25px;
   text-align: center;
   width: 100%;
+}
+.content {
+  position: relative;
+}
+.add-to-cart {
+  position: absolute;
+  right: 30px;
+  width: 220px;
+  padding: 3px;
+  font-size: 16px;
+}
+th, td {
+  text-align: left;
+  padding: 5px 20px 5px 5px;
+}
+.cost {
+  text-align: right;
 }
 </style>
